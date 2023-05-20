@@ -6,13 +6,12 @@ const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
-
-
+// https://platform.openai.com/docs/models/gpt-3-5 - modelos de gpt
 const textGeneration = async (prompt) => {
 
     try {
         const response = await openai.createCompletion({
-            model: 'text-davinci-003',
+            model: 'text-davinci-002',
             prompt: `Human: ${prompt}\nAI: `,
             temperature: 0.9,
             max_tokens: 500,
@@ -48,7 +47,6 @@ webApp.use((req, res, next) => {
 webApp.get('/', (req, res) => {
     res.sendStatus(200);
 });
-
 
 webApp.post('/dialogflow', async (req, res) => {
     
@@ -187,7 +185,7 @@ webApp.post('/dialogflow', async (req, res) => {
         }
     // ---------- SUGESTÔES DE RECEITA ----------------------------------------------
     }  else if (action == 'saber_se_alimento_ok_naosei') {
-        let result = await textGeneration('me dê dicas de de como verificar a qualidade do alimento' + alimento + ' spara ajudar a indentificar quando esta em bom estado de consumo ou se nao presta mais');
+        let result = await textGeneration('me dê dicas de de como verificar a qualidade do alimento' + alimento);
         console.log("\nDica de qualidade:")
         console.log(result.response)
         if (result.status == 1) {
@@ -203,49 +201,183 @@ webApp.post('/dialogflow', async (req, res) => {
                 }
             );
         }
-    // ---------- SUGESTÔES DE RECEITA ----------------------------------------------
-    } else {
-        res.send(
-            {
-                fulfillmentText: `No handler for the action ${action}.`
-            }
-        );    
-    }
-
-    /**
-     *  else if (action === 'input.ajuda') {
-        valor = req.body.queryResult.parameters.ajuda
-        res.send(
-            {
-                fulfillmentText: `Muito obrigado! Para duvidas, sugestoes ou reclamações por favor mande um email para ajuda@email.com.`
-            }
-        );
-        // console.log('ajuda: '+ valor)
-        /*
-        if (valor == 'sim'){
+    } else if (action == 'estado_alimento_resposta') {
+        let result = await textGeneration('como identificar o bom estado do alimento informado' + alimento);
+        
+        if (result.status == 1) {
             res.send(
                 {
-                    fulfillmentText: `você disse sim!`
-                }
-            );
-        } else if (valor =='nao'){
-            res.send(
-                {
-                    fulfillmentText: `Muito obrigado! Para duvidas, sugestoes ou reclamações por favor mande um email para ajuda@email.com.`
+                    fulfillmentText: result.response
                 }
             );
         } else {
             res.send(
                 {
-                    fulfillmentText: `nao entendi sua resposta`
+                    fulfillmentText: `Sorry, I'm not able to help with that.`
                 }
             );
         }
-        
-        // res.status(200)
-        // console.log("input.ajuda")
-    } 
-     */
+        console.log("\n\nResposta: "+result.response)
+    }else if (action === 'input.ajuda') {
+        valor = req.body.queryResult.parameters.ajuda
+        res.send(
+            {
+                fulfillmentText: `Muito obrigado pela sua sugestão! Agora você gostaria de voltar ao menu ou encerrar a conversa?`
+            }
+        );
+//----------------------------------------------------------------------------        
+    } else if (action == 'acucar') {
+        let result = await textGeneration('me dê três dicas de higienização e conservação de alimentos da categoria cereais');
+        if (result.status == 1) {
+            res.send(
+                {
+                    fulfillmentText: result.response
+                }
+            );
+        } else {
+            res.send(
+                {
+                    fulfillmentText: `Sorry, I'm not able to help with that.`
+                }
+            );
+        }
+        console.log("\n\nResposta: "+result.response)
+    } else if (action == 'carnes') {
+        let result = await textGeneration('responda a duvida do usuarios sobre alimento'+alimento);
+        if (result.status == 1) {
+            res.send(
+                {
+                    fulfillmentText: result.response
+                }
+            );
+        } else {
+            res.send(
+                {
+                    fulfillmentText: `Sorry, I'm not able to help with that.`
+                }
+            );
+        }
+        console.log("\n\nResposta: "+result.response)
+     }else if (action == 'cereais') {
+        let result = await textGeneration('responda a duvida do usuarios sobre alimento'+alimento);
+        if (result.status == 1) {
+            res.send(
+                {
+                    fulfillmentText: result.response
+                }
+            );
+        } else {
+            res.send(
+                {
+                    fulfillmentText: `Sorry, I'm not able to help with that.`
+                }
+            );
+        }
+        console.log("\n\nResposta: "+result.response)
+    } else if (action == 'frutas') {
+        let result = await textGeneration('responda a duvida do usuarios sobre alimento'+alimento);
+        if (result.status == 1) {
+            res.send(
+                {
+                    fulfillmentText: result.response
+                }
+            );
+        } else {
+            res.send(
+                {
+                    fulfillmentText: `Sorry, I'm not able to help with that.`
+                }
+            );
+        }
+        console.log("\n\nResposta: "+result.response)
+    } else if (action == 'hortalicas') {
+        let result = await textGeneration('responda a duvida do usuarios sobre alimento'+alimento);
+        if (result.status == 1) {
+            res.send(
+                {
+                    fulfillmentText: result.response
+                }
+            );
+        } else {
+            res.send(
+                {
+                    fulfillmentText: `Sorry, I'm not able to help with that.`
+                }
+            );
+        }
+        console.log("\n\nResposta: "+result.response)
+    }  else if (action == 'leguminosas') {
+        let result = await textGeneration('responda a duvida do usuarios sobre alimento'+alimento);
+        if (result.status == 1) {
+            res.send(
+                {
+                    fulfillmentText: result.response
+                }
+            );
+        } else {
+            res.send(
+                {
+                    fulfillmentText: `Sorry, I'm not able to help with that.`
+                }
+            );
+        }
+        console.log("\n\nResposta: "+result.response)
+    }  else if (action == 'leite') {
+        let result = await textGeneration('responda a duvida do usuarios sobre alimento'+alimento);
+        if (result.status == 1) {
+            res.send(
+                {
+                    fulfillmentText: result.response
+                }
+            );
+        } else {
+            res.send(
+                {
+                    fulfillmentText: `Sorry, I'm not able to help with that.`
+                }
+            );
+        }
+        console.log("\n\nResposta: "+result.response)
+    }  else if (action == 'oleo') {
+        let result = await textGeneration('responda a duvida do usuarios sobre alimento'+alimento);
+        if (result.status == 1) {
+            res.send(
+                {
+                    fulfillmentText: result.response
+                }
+            );
+        } else {
+            res.send(
+                {
+                    fulfillmentText: `Sorry, I'm not able to help with that.`
+                }
+            );
+        }
+        console.log("\n\nResposta: "+result.response)
+    } else if (action == 'ovo') {
+        let result = await textGeneration('responda a duvida do usuarios sobre alimento'+alimento);
+        if (result.status == 1) {
+            res.send(
+                {
+                    fulfillmentText: result.response
+                }
+            );
+        } else {
+            res.send(
+                {
+                    fulfillmentText: `Sorry, I'm not able to help with that.`
+                }
+            );
+        }
+        console.log("\n\nResposta: "+result.response)
+    } else {
+        res.send(
+            {
+                fulfillmentText: `No handler for the action ${action}.`
+            }
+        ); 
+
+    }
 });
 
 /**
@@ -265,3 +397,28 @@ const listener = webApp.listen(process.env.PORT, () => {
  * Rodar: node index.js 
  * Rodar em modo dev: npm run dev
  */
+
+
+
+       // console.log('ajuda: '+ valor)
+        
+        // if (valor == 'sim'){
+        //     res.send(
+        //         {
+        //             fulfillmentText: `você disse sim!`
+        //         }
+        //     );
+        // } else if (valor =='nao'){
+        //     res.send(
+        //         {
+        //             fulfillmentText: `Muito obrigado! Para duvidas, sugestoes ou reclamações por favor mande um email para ajuda@email.com.`
+        //         }
+        //     );
+        // } else {
+        //     res.send(
+        //         {
+        //             fulfillmentText: `nao entendi sua resposta`
+        //         }
+        //     );
+        // }
+        
